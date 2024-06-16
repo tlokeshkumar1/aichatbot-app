@@ -51,6 +51,32 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post("/", async (req,res) =>{
+  const { name, sourceLocation, destinationLocation, dateTime, busType, seatNumber } = req.body;
+
+  const data = {
+    name,
+    sourceLocation,
+    destinationLocation,
+    dateTime,
+    busType,
+    seatNumber,
+  };
+
+  try {
+    const check = await bookingend.findOne({ name });
+
+    if (check) {
+      res.json("exist");
+    } else {
+      await bookingend.insertMany([data]);
+      res.json("not exist");
+    }
+  } catch (e) {
+    res.json("not exist");
+  }
+});
+
 app.post("/chatbot", async (req, res) => {
   const { name, sourceLocation, destinationLocation, dateTime, busType, seatNumber, issue } = req.body;
 
